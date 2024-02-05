@@ -15,3 +15,5 @@ export class Student {
 }
 
 export const StudentSchema = SchemaFactory.createForClass(Student);
+
+StudentSchema.index({ roleNumber: 1 }, { unique: true });
