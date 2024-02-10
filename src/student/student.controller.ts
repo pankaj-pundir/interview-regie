@@ -7,14 +7,18 @@ import {
   Param,
   Post,
   Put,
-  Res,
+  Res,Logger
 } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { StudentService } from './student.service';
 @Controller('student')
 export class StudentController {
+  private readonly logger = new Logger(StudentController.name);
+
   constructor(private readonly studentService: StudentService) {}
+
+
   @Post()
   async createStudent(
     @Res() response,
@@ -24,11 +28,15 @@ export class StudentController {
       const newStudent = await this.studentService.createStudent(
         createStudentDto,
       );
+      // Log success message
+      this.logger.log(`Student created successfully: ${JSON.stringify(newStudent)}`);
+      
       return response.status(HttpStatus.CREATED).json({
         message: 'Student has been created successfully',
         newStudent,
       });
     } catch (err) {
+      this.logger.log(`Student created successfully: ${err}`);
       return response.status(HttpStatus.BAD_REQUEST).json({
         statusCode: 400,
         message: 'Error: Student not created!',
@@ -92,3 +100,7 @@ export class StudentController {
     }
   }
 }
+
+
+// sample payload
+// {"name":"pankaj","roleNumber":18,"class":10,"gender":"male","marks":80}
